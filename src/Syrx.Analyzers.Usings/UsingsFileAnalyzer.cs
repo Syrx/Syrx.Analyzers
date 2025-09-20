@@ -1,14 +1,6 @@
 // Roslyn Analyzer to enforce all using statements are placed in a specific file (default: Usings.cs)
 // Configuration: .editorconfig key 'usings_file_name' can override the default file name
 
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
-using System;
-using System.Collections.Immutable;
-using System.IO;
-using System.Linq;
-
 namespace Syrx.Analyzers.Usings
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]

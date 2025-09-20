@@ -1,12 +1,3 @@
-// Stub for future code fix provider
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeFixes;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Composition;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Syrx.Analyzers.Usings
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(UsingsFileCodeFixProvider)), Shared]
@@ -16,7 +7,7 @@ namespace Syrx.Analyzers.Usings
 
         public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
-        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             foreach (var diagnostic in context.Diagnostics)
             {
@@ -76,6 +67,8 @@ namespace Syrx.Analyzers.Usings
                         equivalenceKey: "MoveUsingsToDesignatedFile"),
                     diagnostic);
             }
+
+            return Task.CompletedTask;
         }
 
         // Helper comparer to avoid duplicate using directives
