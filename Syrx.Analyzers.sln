@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.config\.editorconfig = .config\.editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{9CFAA48B-457A-44B6-A8B7-63ADEA26D7A2}"
+	ProjectSection(SolutionItems) = preProject
+		.docs\INSTALLATION_AND_USAGE.md = .docs\INSTALLATION_AND_USAGE.md
+		.docs\NUGET_PACKAGE_SUMMARY.md = .docs\NUGET_PACKAGE_SUMMARY.md
+		.docs\README.md = .docs\README.md
+		.docs\TEST_BUILD_FIXES_SUMMARY.md = .docs\TEST_BUILD_FIXES_SUMMARY.md
+		.docs\TEST_IMPLEMENTATION_SUMMARY.md = .docs\TEST_IMPLEMENTATION_SUMMARY.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{077460E6-8418-4931-9407-1DE5E1FF6B4D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\copilot-instructions.md = .github\copilot-instructions.md
+		.github\dependabot.yml = .github\dependabot.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7DD4ACA4-16F3-4A9B-8E49-FFBCA21D9457}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1B02EDF6-6763-43FF-B374-7829B7A3D202}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{E6DD537B-F933-4F88-8D6E-4166F34D99CB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration", "integration", "{4458FBD3-E86B-4723-A056-0691E3EF9E2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{49A5A912-6560-49DB-B7E2-1676B00FF266}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syrx.Analyzers.Usings", "src\Syrx.Analyzers.Usings\Syrx.Analyzers.Usings.csproj", "{A0F603DB-E4B5-3D68-BC34-1B6C70D507EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syrx.Analyzers.Usings.Tests.Integration", "tests\integration\Syrx.Analyzers.Usings.Tests.Integration\Syrx.Analyzers.Usings.Tests.Integration.csproj", "{C744DDF0-3275-7B33-3669-D0BDD92F9A98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syrx.Analyzers.Usings.Tests.Unit", "tests\unit\Syrx.Analyzers.Usings.Tests.Unit\Syrx.Analyzers.Usings.Tests.Unit.csproj", "{AFE58069-4ACB-B59A-3A99-EABEFC12DB4A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0F603DB-E4B5-3D68-BC34-1B6C70D507EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0F603DB-E4B5-3D68-BC34-1B6C70D507EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0F603DB-E4B5-3D68-BC34-1B6C70D507EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0F603DB-E4B5-3D68-BC34-1B6C70D507EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C744DDF0-3275-7B33-3669-D0BDD92F9A98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C744DDF0-3275-7B33-3669-D0BDD92F9A98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C744DDF0-3275-7B33-3669-D0BDD92F9A98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C744DDF0-3275-7B33-3669-D0BDD92F9A98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFE58069-4ACB-B59A-3A99-EABEFC12DB4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFE58069-4ACB-B59A-3A99-EABEFC12DB4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFE58069-4ACB-B59A-3A99-EABEFC12DB4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFE58069-4ACB-B59A-3A99-EABEFC12DB4A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E6DD537B-F933-4F88-8D6E-4166F34D99CB} = {1B02EDF6-6763-43FF-B374-7829B7A3D202}
+		{4458FBD3-E86B-4723-A056-0691E3EF9E2F} = {1B02EDF6-6763-43FF-B374-7829B7A3D202}
+		{49A5A912-6560-49DB-B7E2-1676B00FF266} = {077460E6-8418-4931-9407-1DE5E1FF6B4D}
+		{A0F603DB-E4B5-3D68-BC34-1B6C70D507EE} = {7DD4ACA4-16F3-4A9B-8E49-FFBCA21D9457}
+		{C744DDF0-3275-7B33-3669-D0BDD92F9A98} = {4458FBD3-E86B-4723-A056-0691E3EF9E2F}
+		{AFE58069-4ACB-B59A-3A99-EABEFC12DB4A} = {E6DD537B-F933-4F88-8D6E-4166F34D99CB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3A5E0A55-B2CB-44F7-AFC7-718BB460CF51}
+	EndGlobalSection
+EndGlobal
