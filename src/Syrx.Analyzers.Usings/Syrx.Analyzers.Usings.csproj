@@ -53,10 +53,6 @@
   </ItemGroup>
 
   <!-- Analyzer release tracking -->
-  <ItemGroup>
-    <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
-    <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
-  </ItemGroup>
 
   <!-- Analyzer assembly packaging -->
   <Target Name="IncludeAnalyzerAssembliesInPackage" BeforeTargets="_GetPackageFiles">
