@@ -24,13 +24,22 @@ namespace Syrx.Analyzers.Usings
                             var usings = root.DescendantNodes().OfType<Microsoft.CodeAnalysis.CSharp.Syntax.UsingDirectiveSyntax>().ToList();
                             if (!usings.Any()) return document.Project.Solution;
 
+                            var globalUsings = usings
+                                .Select(ToGlobalUsingDirective)
+                                .Where(u => u != null)
+                                .Cast<Microsoft.CodeAnalysis.CSharp.Syntax.UsingDirectiveSyntax>();
+
                             // Remove using directives from current document
-                            var newRoot = root.RemoveNodes(usings, Microsoft.CodeAnalysis.SyntaxRemoveOptions.KeepNoTrivia);
+                            var newRoot = root.RemoveNodes(usings, Microsoft.CodeAnalysis.SyntaxRemoveOptions.KeepExteriorTrivia);
                             if (newRoot == null) return document.Project.Solution;
                             var newDocument = document.WithSyntaxRoot(newRoot);
 
-                            // Determine target file name from diagnostic message
-                            var targetFileName = diagnostic.GetMessage().Split('\'').Skip(1).FirstOrDefault() ?? "Usings.cs";
+                            // Determine target file name from diagnostic properties
+                            var targetFileName = diagnostic.Properties.TryGetValue("TargetFileName", out var fn) && !string.IsNullOrWhiteSpace(fn)
+                                ? fn
+                                : "Usings.cs";
+                            targetFileName = Path.GetFileName(targetFileName);
+                            if (string.IsNullOrWhiteSpace(targetFileName)) targetFileName = "Usings.cs";
                             var project = document.Project;
                             var designatedDoc = project.Documents.FirstOrDefault(d => 
                                 !string.IsNullOrEmpty(d.FilePath) && 
@@ -39,8 +48,10 @@ namespace Syrx.Analyzers.Usings
                             if (designatedDoc == null)
                             {
                                 // Create new designated file with global using statements
-                                var usingsText = string.Join("\r\n", usings.Select(u => $"global {u.ToFullString().Trim()}"));
-                                var newDoc = project.AddDocument(targetFileName, usingsText);
+                                var newDesignatedRoot = Microsoft.CodeAnalysis.CSharp.SyntaxFactory.CompilationUnit()
+                                    .WithUsings(Microsoft.CodeAnalysis.CSharp.SyntaxFactory.List(globalUsings.Distinct(new UsingDirectiveComparer())))
+                                    .NormalizeWhitespace();
+                                var newDoc = project.AddDocument(targetFileName, newDesignatedRoot);
                                 return newDoc.Project.Solution.WithDocumentSyntaxRoot(newDocument.Id, newRoot);
                             }
                             else
@@ -48,14 +59,6 @@ namespace Syrx.Analyzers.Usings
                                 // Append global using statements to existing designated file
                                 var designatedRoot = await designatedDoc.GetSyntaxRootAsync(c).ConfigureAwait(false);
                                 var designatedUsings = designatedRoot?.DescendantNodes().OfType<Microsoft.CodeAnalysis.CSharp.Syntax.UsingDirectiveSyntax>() ?? Enumerable.Empty<Microsoft.CodeAnalysis.CSharp.Syntax.UsingDirectiveSyntax>();
-                                var globalUsings = usings.Select(u => 
-                                {
-                                    var name = u.Name;
-                                    if (name == null) return null;
-                                    return Microsoft.CodeAnalysis.CSharp.SyntaxFactory.UsingDirective(name)
-                                        .WithGlobalKeyword(Microsoft.CodeAnalysis.CSharp.SyntaxFactory.Token(Microsoft.CodeAnalysis.CSharp.SyntaxKind.GlobalKeyword))
-                                        .WithStaticKeyword(u.StaticKeyword);
-                                }).Where(u => u != null).Cast<Microsoft.CodeAnalysis.CSharp.Syntax.UsingDirectiveSyntax>();
                                 var combinedUsings = designatedUsings.Concat(globalUsings).Distinct(new UsingDirectiveComparer());
                                 var newDesignatedRoot = Microsoft.CodeAnalysis.CSharp.SyntaxFactory.CompilationUnit().WithUsings(Microsoft.CodeAnalysis.CSharp.SyntaxFactory.List(combinedUsings)).NormalizeWhitespace();
                                 var updatedDesignatedDoc = designatedDoc.WithSyntaxRoot(newDesignatedRoot);
@@ -71,6 +74,27 @@ namespace Syrx.Analyzers.Usings
             return Task.CompletedTask;
         }
 
+        private static Microsoft.CodeAnalysis.CSharp.Syntax.UsingDirectiveSyntax? ToGlobalUsingDirective(Microsoft.CodeAnalysis.CSharp.Syntax.UsingDirectiveSyntax usingDirective)
+        {
+            var name = usingDirective.Name;
+            if (name == null) return null;
+
+            var globalUsing = Microsoft.CodeAnalysis.CSharp.SyntaxFactory.UsingDirective(name.WithoutTrivia())
+                .WithGlobalKeyword(Microsoft.CodeAnalysis.CSharp.SyntaxFactory.Token(Microsoft.CodeAnalysis.CSharp.SyntaxKind.GlobalKeyword));
+
+            if (usingDirective.Alias != null)
+            {
+                globalUsing = globalUsing.WithAlias(usingDirective.Alias.WithoutTrivia());
+            }
+
+            if (usingDirective.StaticKeyword.IsKind(Microsoft.CodeAnalysis.CSharp.SyntaxKind.StaticKeyword))
+            {
+                globalUsing = globalUsing.WithStaticKeyword(Microsoft.CodeAnalysis.CSharp.SyntaxFactory.Token(Microsoft.CodeAnalysis.CSharp.SyntaxKind.StaticKeyword));
+            }
+
+            return globalUsing;
+        }
+
         // Helper comparer to avoid duplicate using directives
         private class UsingDirectiveComparer : IEqualityComparer<Microsoft.CodeAnalysis.CSharp.Syntax.UsingDirectiveSyntax>
         {
@@ -78,11 +102,11 @@ namespace Syrx.Analyzers.Usings
             {
                 if (x == null && y == null) return true;
                 if (x == null || y == null) return false;
-                return x.ToString() == y.ToString();
+                return x.Name?.ToFullString().Trim() == y.Name?.ToFullString().Trim();
             }
             public int GetHashCode(Microsoft.CodeAnalysis.CSharp.Syntax.UsingDirectiveSyntax obj)
             {
-                return obj?.ToString()?.GetHashCode() ?? 0;
+                return obj?.Name?.ToFullString().Trim()?.GetHashCode() ?? 0;
             }
         }
     }
