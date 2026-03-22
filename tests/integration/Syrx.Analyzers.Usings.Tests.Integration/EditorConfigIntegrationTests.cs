@@ -85,9 +85,13 @@ namespace TestNamespace
                     Directory.Delete(_tempDirectory, true);
                 }
             }
-            catch
+            catch (IOException ex)
             {
-                // Ignore cleanup errors
+                Console.Error.WriteLine($"[EditorConfigIntegrationTests] Failed to delete temp directory '{_tempDirectory}': {ex.Message}");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.Error.WriteLine($"[EditorConfigIntegrationTests] Access denied deleting temp directory '{_tempDirectory}': {ex.Message}");
             }
         }
     }

@@ -1,25 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- NuGet package identity and description (build/packaging settings are in Directory.Build.props) -->
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-    <IsRoslynAnalyzer>true</IsRoslynAnalyzer>
-    
-    <!-- NuGet Package Properties -->
     <PackageId>Syrx.Analyzers.Usings</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
-    <Authors>Syrx</Authors>
-    <Company>Syrx</Company>
+    <PackageVersion>1.1.1</PackageVersion>
     <Product>Syrx.Analyzers.Usings</Product>
     <Description>A Roslyn analyzer and code fix provider that enforces all C# using statements are placed in a designated file (default: Usings.cs). Helps maintain consistent code style and can be customized via .editorconfig.</Description>
     <PackageTags>roslyn;analyzer;codefix;using;usings;csharp;editorconfig;code-style</PackageTags>
     <PackageProjectUrl>https://github.com/syrx/Syrx.Analyzers.Usings</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/syrx/Syrx.Analyzers.Usings</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
       v1.0.0:
       - Initial release
@@ -28,22 +16,12 @@
       - .editorconfig support for custom file names
       - Support for both 'dotnet_usings_file_name' and 'usings_file_name' configuration keys
     </PackageReleaseNotes>
-    
-    <!-- Analyzer-specific properties -->
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <DevelopmentDependency>true</DevelopmentDependency>
-    <NoPackageAnalysis>true</NoPackageAnalysis>
-    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-    
-    <!-- Build properties -->
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="5.3.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.3.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.3.0" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- Include files that exist -->
@@ -53,6 +31,10 @@
   </ItemGroup>
 
   <!-- Analyzer release tracking -->
+  <ItemGroup>
+    <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
+    <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
+  </ItemGroup>
 
   <!-- Analyzer assembly packaging -->
   <Target Name="IncludeAnalyzerAssembliesInPackage" BeforeTargets="_GetPackageFiles">

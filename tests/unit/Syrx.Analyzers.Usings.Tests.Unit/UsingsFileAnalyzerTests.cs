@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Xunit;
 
 namespace Syrx.Analyzers.Usings.Tests.Unit
@@ -18,7 +17,7 @@ namespace Syrx.Analyzers.Usings.Tests.Unit
                 .WithSpan("TestFile.cs", 2, 1, 2, 26)  // Fixed column position based on actual diagnostic
                 .WithArguments("Usings.cs");
 
-            var test = new CSharpAnalyzerTest<UsingsFileAnalyzer, XUnitVerifier>
+            var test = new CSharpAnalyzerTest<UsingsFileAnalyzer, DefaultVerifier>
             {
                 TestState =
                     {
@@ -35,7 +34,7 @@ namespace Syrx.Analyzers.Usings.Tests.Unit
         {
             var source = "global using System;\nglobal using static System.Math;\nnamespace Test { class C { } }";
 
-            var test = new CSharpAnalyzerTest<UsingsFileAnalyzer, XUnitVerifier>
+            var test = new CSharpAnalyzerTest<UsingsFileAnalyzer, DefaultVerifier>
             {
                 TestState =
                     {
@@ -53,7 +52,7 @@ namespace Syrx.Analyzers.Usings.Tests.Unit
             // even if they are regular (non-global) using statements, because the file name matches
             var source = "using System;\nusing static System.Math;\nnamespace Test { class C { } }";
 
-            var test = new CSharpAnalyzerTest<UsingsFileAnalyzer, XUnitVerifier>
+            var test = new CSharpAnalyzerTest<UsingsFileAnalyzer, DefaultVerifier>
             {
                 TestState =
                     {
@@ -69,7 +68,7 @@ namespace Syrx.Analyzers.Usings.Tests.Unit
         {
             var source = "namespace Test { class C { } }";
 
-            var test = new CSharpAnalyzerTest<UsingsFileAnalyzer, XUnitVerifier>
+            var test = new CSharpAnalyzerTest<UsingsFileAnalyzer, DefaultVerifier>
             {
                 TestState =
                 {

@@ -35,9 +35,10 @@ namespace Syrx.Analyzers.Usings
 
             if (!fileName.Equals(targetFileName, StringComparison.OrdinalIgnoreCase))
             {
+                var diagnosticProperties = ImmutableDictionary<string, string?>.Empty.Add("TargetFileName", targetFileName);
                 foreach (var usingDirective in usings)
                 {
-                    var diagnostic = Diagnostic.Create(Rule, usingDirective.GetLocation(), targetFileName);
+                    var diagnostic = Diagnostic.Create(Rule, usingDirective.GetLocation(), diagnosticProperties, targetFileName);
                     context.ReportDiagnostic(diagnostic);
                 }
             }
@@ -50,11 +51,11 @@ namespace Syrx.Analyzers.Usings
             // Try both keys for compatibility
             if (configOptions.TryGetValue("dotnet_usings_file_name", out var value) && !string.IsNullOrWhiteSpace(value))
             {
-                return value.Trim();
+                return Path.GetFileName(value.Trim());
             }
             if (configOptions.TryGetValue("usings_file_name", out var value2) && !string.IsNullOrWhiteSpace(value2))
             {
-                return value2.Trim();
+                return Path.GetFileName(value2.Trim());
             }
             return null;
         }
